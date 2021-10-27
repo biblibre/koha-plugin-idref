@@ -1,0 +1,138 @@
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+    <title>IdRef authority search &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style>
+    #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
+</style>
+
+<body id="idref_auth_search" class="cat">
+    <div class="container-fluid">
+        <h2>IdRef Search</h2>
+
+        <form method="GET" action="/cgi-bin/koha/plugins/run.pl" class="checkboxed">
+            <input type="hidden" name="class" value="Koha::Plugin::Com::BibLibre::IdRef" />
+            <input type="hidden" name="method" value="idRefSearchForm" />
+            <input type="hidden" name="op" value="search" />
+            <div class="row">
+                <div class="col-xs-12">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label for="all">Search</label>
+                                <input type="text" id="all" name="all" value="[% all | html %]" />
+                            </li>
+                            <li>
+                                [% recordtypes = [
+                                    { value = 'a', label = 'Personne' },
+                                    { value = 'b', label = 'Collectivité' },
+                                    { value = 's', label = 'Congrès' },
+                                    { value = 'c', label = 'Nom géographique' },
+                                    { value = 'd', label = 'Marque / Famille' },
+                                    { value = 'f', label = 'Titre uniforme' },
+                                    { value = 'h', label = 'Auteur titre' },
+                                    { value = 'r', label = 'Rameau' },
+                                    { value = 't', label = 'FMeSH' },
+                                    { value = 'u', label = 'Forme Rameau' },
+                                    { value = 'v', label = 'Genre Rameau' },
+                                    { value = 'w', label = 'RCR = Bibliothèque Sudoc' },
+                                ] %]
+                                <label for="recordtype">Record type</label>
+                                <select type="text" id="recordtype" name="recordtype">
+                                    <option value=""></option>
+                                    [% FOREACH rtype IN recordtypes %]
+                                        [% IF rtype.value == recordtype %]
+                                            <option value="[% rtype.value | html %]" selected>[% rtype.label | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% rtype.value | html %]">[% rtype.label | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                    <option value="w">RCR = Bibliothèque Sudoc</option>
+                                </select>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="submit" class="submit" value="Search"/>
+                        <a class="cancel close" href="#">Close</a>
+                    </fieldset>
+                </div>
+            </div>
+        </form>
+
+        [% IF search %]
+            [% IF results %]
+                <table id="results">
+                    <thead>
+                        <tr>
+                            <th>PPN</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH result IN results %]
+                            <tr>
+                                <td>
+                                    <a href="https://www.idref.fr/[% result.ppn | uri %]" target="_blank">[% result.ppn | html %]</a>
+                                </td>
+                                <td>[% result.description | html %]</td>
+                                <td>
+                                    <a class="btn btn-default btn-xs data-preview" data-ppn="[% result.ppn | html %]">MARC preview</a>
+                                    <a class="btn btn-default btn-xs data-import" data-ppn="[% result.ppn | html %]">Import</a>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            [% ELSE %]
+                No results
+            [% END %]
+            [% IF prevPageUrl %]
+                <a class="btn btn-xs btn-default" href="[% prevPageUrl | html %]"><i class="fa fa-angle-double-left"></i> Previous page</a>
+            [% END %]
+            [% IF nextPageUrl %]
+                <a class="btn btn-xs btn-default" href="[% nextPageUrl | html %]">Next page <i class="fa fa-angle-double-right"></i></a>
+            [% END %]
+        [% END %]
+
+<div class="modal fade" id="marc-preview-modal" tabindex="-1" role="dialog" aria-labelledby="marc-preview-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="marc-preview-modal-label">MARC preview</h3>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $('#results').on('click', '.data-preview', function (ev) {
+            ev.preventDefault();
+            const ppn = this.getAttribute('data-ppn');
+            $('#marc-preview-modal .modal-body').html('<div id="loading"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt=""/> ' + __('Loading') + '</div>');
+            $('#marc-preview-modal .modal-body').load('/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::BibLibre::IdRef&method=showMarc&ppn=' + ppn + ' div');
+            $('#marc-preview-modal').modal('show');
+        });
+        $('#results').on('click', '.data-import', function (ev) {
+            ev.preventDefault();
+            const ppn = this.getAttribute('data-ppn');
+            $.getJSON('/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::BibLibre::IdRef&method=importBreedingAuth&ppn=' + ppn, function (data) {
+                opener.document.location = '/cgi-bin/koha/authorities/authorities.pl?breedingid=' + data.breedingid + '&authtypecode=' + data.authtypecode;
+                window.close();
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
