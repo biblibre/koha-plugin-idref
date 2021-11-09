@@ -24,7 +24,7 @@ our $metadata = {
     minimum_version => '20.11',
     maximum_version => undef,
     version         => $VERSION,
-    description     => 'This plugin allows to import authorities from IdRef',
+    description     => "Permet d'importer des autorités depuis IdRef",
 };
 
 sub new {
@@ -44,7 +44,7 @@ sub intranet_js {
     if (document.location.pathname === "/cgi-bin/koha/authorities/authorities-home.pl" || document.location.pathname === "/cgi-bin/koha/authorities/authorities.pl") {
         const button = document.createElement("button");
         button.classList.add("btn", "btn-default");
-        button.innerHTML = '<i class="fa fa-search"></i> New from IdRef';
+        button.innerHTML = '<i class="fa fa-search"></i> Importer depuis IdRef';
         button.addEventListener("click", function (ev) {
             ev.preventDefault();
             window.open("/cgi-bin/koha/plugins/run.pl?class=" + encodeURIComponent("Koha::Plugin::Com::BibLibre::IdRef") + "&method=idRefSearchForm", "idrefsearch", "width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes");

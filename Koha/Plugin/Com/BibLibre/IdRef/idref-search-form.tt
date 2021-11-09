@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>IdRef authority search &rsaquo; Koha</title>
+    <title>Recherche d'autorités IdRef &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
@@ -10,7 +10,7 @@
 
 <body id="idref_auth_search" class="cat">
     <div class="container-fluid">
-        <h2>IdRef Search</h2>
+        <h2>Recherche IdRef</h2>
 
         <form method="GET" action="/cgi-bin/koha/plugins/run.pl" class="checkboxed">
             <input type="hidden" name="class" value="Koha::Plugin::Com::BibLibre::IdRef" />
@@ -21,7 +21,7 @@
                     <fieldset class="rows">
                         <ol>
                             <li>
-                                <label for="all">Search</label>
+                                <label for="all">Recherche</label>
                                 <input type="text" id="all" name="all" value="[% all | html %]" />
                             </li>
                             <li>
@@ -39,7 +39,7 @@
                                     { value = 'v', label = 'Genre Rameau' },
                                     { value = 'w', label = 'RCR = Bibliothèque Sudoc' },
                                 ] %]
-                                <label for="recordtype">Record type</label>
+                                <label for="recordtype">Type d'autorité</label>
                                 <select type="text" id="recordtype" name="recordtype">
                                     <option value=""></option>
                                     [% FOREACH rtype IN recordtypes %]
@@ -55,8 +55,8 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" class="submit" value="Search"/>
-                        <a class="cancel close" href="#">Close</a>
+                        <input type="submit" class="submit" value="Rechercher"/>
+                        <a class="cancel close" href="#">Fermer</a>
                     </fieldset>
                 </div>
             </div>
@@ -80,21 +80,21 @@
                                 </td>
                                 <td>[% result.description | html %]</td>
                                 <td>
-                                    <a class="btn btn-default btn-xs data-preview" data-ppn="[% result.ppn | html %]">MARC preview</a>
-                                    <a class="btn btn-default btn-xs data-import" data-ppn="[% result.ppn | html %]">Import</a>
+                                    <a class="btn btn-default btn-xs data-preview" data-ppn="[% result.ppn | html %]">Prévisualisation MARC</a>
+                                    <a class="btn btn-default btn-xs data-import" data-ppn="[% result.ppn | html %]">Importer</a>
                                 </td>
                             </tr>
                         [% END %]
                     </tbody>
                 </table>
             [% ELSE %]
-                No results
+                Aucun résultat
             [% END %]
             [% IF prevPageUrl %]
-                <a class="btn btn-xs btn-default" href="[% prevPageUrl | html %]"><i class="fa fa-angle-double-left"></i> Previous page</a>
+                <a class="btn btn-xs btn-default" href="[% prevPageUrl | html %]"><i class="fa fa-angle-double-left"></i> Page précédente</a>
             [% END %]
             [% IF nextPageUrl %]
-                <a class="btn btn-xs btn-default" href="[% nextPageUrl | html %]">Next page <i class="fa fa-angle-double-right"></i></a>
+                <a class="btn btn-xs btn-default" href="[% nextPageUrl | html %]">Page suivante <i class="fa fa-angle-double-right"></i></a>
             [% END %]
         [% END %]
 
@@ -102,14 +102,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title" id="marc-preview-modal-label">MARC preview</h3>
+        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="marc-preview-modal-label">Prévisualisation MARC</h3>
       </div>
       <div class="modal-body">
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
       </div>
     </div>
   </div>
@@ -120,7 +120,7 @@
         $('#results').on('click', '.data-preview', function (ev) {
             ev.preventDefault();
             const ppn = this.getAttribute('data-ppn');
-            $('#marc-preview-modal .modal-body').html('<div id="loading"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt=""/> ' + __('Loading') + '</div>');
+            $('#marc-preview-modal .modal-body').html('<div id="loading"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt=""/> ' + __('Chargement') + '</div>');
             $('#marc-preview-modal .modal-body').load('/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::BibLibre::IdRef&method=showMarc&ppn=' + ppn + ' div');
             $('#marc-preview-modal').modal('show');
         });
