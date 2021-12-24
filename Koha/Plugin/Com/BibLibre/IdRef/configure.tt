@@ -1,0 +1,50 @@
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Configuration &rsaquo; IdRef &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style>
+    .checkbox label {
+        margin-left: 0;
+    }
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; IdRef &rsaquo; Configuration</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h2>Configuration du plugin IdRef</h3>
+
+            <form method="post" class="form-horizontal">
+                <input type="hidden" name="class" value="[% CLASS %]"/>
+                <input type="hidden" name="method" value="[% METHOD %]"/>
+                <input type="hidden" name="save" value="1" />
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                [% IF copy_001_to_009 %]
+                                    <input type="checkbox" id="copy-001-to-009" name="copy-001-to-009" value="1" checked />
+                                [% ELSE %]
+                                    <input type="checkbox" id="copy-001-to-009" name="copy-001-to-009" value="1" />
+                                [% END %]
+                                Copier le 001 dans le 009
+                            </label>
+                        </div>
+                        <p class="help-block">Si coché, copie la valeur du champ 001 dans le champ 009 à l'import</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-default">Enregistrer la configuration</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+[% INCLUDE 'intranet-bottom.inc' %]

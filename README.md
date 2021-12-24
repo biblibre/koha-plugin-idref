@@ -21,3 +21,9 @@ to:
 
 * preview MARC records
 * import a record in a new Koha authority
+
+## Configuration
+
+On the plugin configuration page you can enable an option named "Copy 001 into
+009" which, as the name suggests, will make the plugin copy the contents of
+field 001 into field 009 when importing an authority.

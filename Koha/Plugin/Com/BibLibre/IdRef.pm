@@ -38,6 +38,31 @@ sub new {
     return $self;
 }
 
+sub configure {
+    my ( $self, $args ) = @_;
+    my $cgi = $self->{'cgi'};
+
+    unless ( $cgi->param('save') ) {
+        my $template = $self->get_template({ file => 'configure.tt' });
+
+        my $copy_001_to_009 = $self->retrieve_data('copy_001_to_009') ? 1 : 0;
+        $template->param(
+            copy_001_to_009 => $copy_001_to_009,
+        );
+
+        $self->output_html( $template->output() );
+    }
+    else {
+        my $copy_001_to_009 = $cgi->param('copy-001-to-009') ? 1 : 0;
+        $self->store_data(
+            {
+                copy_001_to_009 => $copy_001_to_009,
+            }
+        );
+        $self->go_home();
+    }
+}
+
 sub intranet_js {
     my $js = <<END_JS;
     <script>
@@ -161,6 +186,22 @@ sub importBreedingAuth {
     my $record = $self->_getRecordFromIdRef($ppn);
     my $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $record });
     my $authtypecode = C4::AuthoritiesMarc::GuessAuthTypeCode($record);
+
+    my $copy_001_to_009 = $self->retrieve_data('copy_001_to_009') // 0;
+    if ($copy_001_to_009) {
+        my $f001 = $record->field('001');
+        if ($f001) {
+            my $ppn = $f001->data();
+            my $f009 = $record->field('009');
+            if ($f009) {
+                $f009->update($ppn);
+            } else {
+                $f009 = MARC::Field->new('009', $ppn);
+                $record->insert_fields_ordered($f009);
+            }
+        }
+    }
+
     my $breedingid = C4::Breeding::ImportBreedingAuth( $record, 'IdRef', 'UTF-8', $heading );
 
     my $data = {
