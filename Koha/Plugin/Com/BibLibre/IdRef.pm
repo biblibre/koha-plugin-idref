@@ -38,6 +38,27 @@ sub new {
     return $self;
 }
 
+# Mandatory even if does nothing
+sub install {
+    my ( $self, $args ) = @_;
+
+    return 1;
+}
+
+# Mandatory even if does nothing
+sub upgrade {
+    my ( $self, $args ) = @_;
+
+    return 1;
+}
+
+# Mandatory even if does nothing
+sub uninstall {
+    my ( $self, $args ) = @_;
+
+    return 1;
+}
+
 sub configure {
     my ( $self, $args ) = @_;
     my $cgi = $self->{'cgi'};
