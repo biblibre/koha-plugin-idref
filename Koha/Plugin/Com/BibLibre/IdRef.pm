@@ -4,13 +4,13 @@ use Modern::Perl;
 
 use Cwd qw(abs_path);
 use LWP::UserAgent;
-use JSON;
+use JSON qw( encode_json decode_json );
 use MARC::Record;
 use MARC::File::XML;
 
-use C4::Auth qw(get_template_and_user);
-use C4::AuthoritiesMarc;
-use C4::Breeding;
+use C4::Auth qw( get_template_and_user );
+use C4::AuthoritiesMarc qw( GetAuthorizedHeading GuessAuthTypeCode );
+use C4::Breeding qw( ImportBreedingAuth );
 
 use base 'Koha::Plugins::Base';
 
@@ -20,7 +20,7 @@ our $metadata = {
     name            => 'IdRef',
     author          => 'BibLibre',
     date_authored   => '2021-10-20',
-    date_updated    => "2021-10-20",
+    date_updated    => "2022-05-01",
     minimum_version => '20.11',
     maximum_version => undef,
     version         => $VERSION,
