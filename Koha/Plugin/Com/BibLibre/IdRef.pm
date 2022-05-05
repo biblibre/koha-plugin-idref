@@ -14,14 +14,14 @@ use C4::Breeding qw( ImportBreedingAuth );
 
 use base 'Koha::Plugins::Base';
 
-our $VERSION = "0.2.0";
+our $VERSION = "0.3.0";
 
 our $metadata = {
     name            => 'IdRef',
     author          => 'BibLibre',
     date_authored   => '2021-10-20',
     date_updated    => "2022-05-01",
-    minimum_version => '20.11',
+    minimum_version => '21.11',
     maximum_version => undef,
     version         => $VERSION,
     description     => "Permet d'importer des autorités depuis IdRef",
