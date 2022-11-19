@@ -10,6 +10,8 @@ to work correctly.
 
 Without it you will encounter encoding issues.
 
+Also needs [Bug 32279](https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=32279) since 21.11.
+
 ## Usage
 
 When installed and enabled, the plugin adds a button "New from IdRef" in
