@@ -199,7 +199,7 @@ sub showMarc {
     $self->output_html( $template->output() );
 }
 
-sub importBreedingAuth {
+sub import_breeding_auth {
     my ( $self, $args ) = @_;
 
     my $cgi = $self->{cgi};

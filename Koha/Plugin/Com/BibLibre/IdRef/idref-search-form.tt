@@ -127,7 +127,7 @@
         $('#results').on('click', '.data-import', function (ev) {
             ev.preventDefault();
             const ppn = this.getAttribute('data-ppn');
-            $.getJSON('/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::BibLibre::IdRef&method=importBreedingAuth&ppn=' + ppn, function (data) {
+            $.getJSON('/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::BibLibre::IdRef&method=import_breeding_auth&ppn=' + ppn, function (data) {
                 opener.document.location = '/cgi-bin/koha/authorities/authorities.pl?breedingid=' + data.breedingid + '&authtypecode=' + data.authtypecode;
                 window.close();
             });
