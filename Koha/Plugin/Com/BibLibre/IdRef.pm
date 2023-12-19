@@ -14,13 +14,13 @@ use C4::Breeding qw( ImportBreedingAuth );
 
 use base 'Koha::Plugins::Base';
 
-our $VERSION = "0.3.0";
+our $VERSION = "0.3.1";
 
 our $metadata = {
     name            => 'IdRef',
     author          => 'BibLibre',
     date_authored   => '2021-10-20',
-    date_updated    => "2022-05-01",
+    date_updated    => "2023-12-19",
     minimum_version => '21.11',
     maximum_version => undef,
     version         => $VERSION,
@@ -117,8 +117,7 @@ sub idRefSearchForm {
         {   template_name   => abs_path( $self->mbf_path( 'idref-search-form.tt' ) ),
             query           => $cgi,
             type            => 'intranet',
-            authnotrequired => 0,
-            is_plugin       => 1,
+            flagsrequired   => { editauthorities => 1 },
         }
     );
 
@@ -189,8 +188,7 @@ sub showMarc {
         template_name   => 'catalogue/showmarc.tt',
         query           => $cgi,
         type            => 'intranet',
-        authnotrequired => 0,
-        is_plugin       => 1,
+        flagsrequired   => { catalogue => 1 },
     });
 
     my $ppn = $cgi->param('ppn');
